@@ -1,6 +1,6 @@
 const express = require('express');
 const cors = require("cors");
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 const app = express();
 app.use(cors());
 app.use(express.json());
@@ -30,6 +30,19 @@ async function run() {
       const data=commentCollection.find(query)
       const post = await data.toArray();
       res.send(post)
+    })
+    app.get("/comment/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = {commentId:id}
+      const data = await commentCollection.find(query).toArray()
+      res.send(data)
+    })
+    app.get("/profileposts/:email", async (req, res) => {
+      const email = req.params.email;
+      const query = {email:email}
+      const data = await postCollection.find(query).toArray()
+      console.log(data);
+      res.send(data)
     })
     app.post('/posts', async(req, res) => {
       const data = req.body;
