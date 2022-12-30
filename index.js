@@ -18,6 +18,8 @@ async function run() {
     const data = client.db("mediaswag");
     const postCollection = data.collection("posts");
     const commentCollection = data.collection("comment");
+    const collegeCollection = data.collection("college");
+    const highSchoolCollection = data.collection("highschool");
 
     app.get("/posts", async (req, res) => {
       const query = {};
@@ -44,6 +46,18 @@ async function run() {
       console.log(data);
       res.send(data)
     })
+    app.get("/college/:email", async (req, res) => {
+      const email = req.params.email;
+      const query = {email:email};
+      const data = await collegeCollection.find(query).toArray();
+      res.send(data);
+    })
+    app.get("/highschool/:email", async (req, res) => {
+      const email = req.params.email;
+      const query = {email:email};
+      const data = await highSchoolCollection.find(query).toArray();
+      res.send(data);
+    })
     app.post('/posts', async(req, res) => {
       const data = req.body;
       const result = await postCollection.insertOne(data);
@@ -54,7 +68,16 @@ async function run() {
       const result = await commentCollection.insertOne(data);
       res.send(result)
     })
-
+    app.post("/college", async (req, res) => {
+      const data = req.body;
+      const result = await collegeCollection.insertOne(data);
+      res.send(result);
+    })
+    app.post("/highschool", async (req, res) => {
+      const data = req.body;
+      const result = await highSchoolCollection.insertOne(data);
+      res.send(result);
+    })
   }finally{
     
   }
